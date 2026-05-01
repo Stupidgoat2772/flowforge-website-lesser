@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content=">flowforge — ADHD-native coaching for high-agency operators. Build systems that work with your brain, not against it.">
+  <title>&gt;flowforge — Forge Your Flow</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒</text></svg>">
+</head>
+<body>
+
+  <!-- Background Effects -->
+  <canvas id="ascii-rain" aria-hidden="true"></canvas>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-radial" aria-hidden="true"></div>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <img src="assets/logo.png" alt=">flowforge logo">
+        <span>&gt;flowforge</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#packages">Packages</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="https://calendar.app.google/rT363hdnCVa6CTW1A" class="btn btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.8rem;">Book a Call</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content fade-in">
+        <div class="hero-badge">
+          <span class="pulse"></span>
+          Accepting new clients
+        </div>
+        <h1>
+          Stop managing your ADHD.<br>
+          <span class="highlight">Start engineering your flow.</span>
+        </h1>
+        <p>
+          Systems-first coaching for high-agency operators with ADHD. 
+          Build infrastructure that turns your neurodivergent wiring 
+          into a structural advantage — not a liability.
+        </p>
+        <div class="hero-cta">
+          <a href="https://calendar.app.google/rT363hdnCVa6CTW1A" class="btn btn-primary">Book Free Discovery Call</a>
+          <a href="#results" class="btn btn-ghost">Watch Testimonial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== About ===== -->
+  <section id="about">
+    <div class="container">
+      <div class="section-label">About</div>
+      <div class="about-grid">
+        <div class="about-photo fade-in">
+          <img src="assets/profile.jpg" alt="Damian Caruso" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+        </div>
+        <div class="about-text fade-in">
+          <h3>My name's Damian Caruso. I have AuDHD.</h3>
+          <p>
+            You and me are both sick of working twice as hard as others to get half
+            the results. It's the curse of ADHD. I got so sick of it I dedicated my
+            entire life to eliminating the problems that stop us from achieving our
+            dreams.
+          </p>
+          <p>
+            I teach people to lock in on foundational principles, systems, and how
+            to operate with ADHD instead of against it — so you can enter the flow
+            of fulfillment and power. There's so much work to be done in this short
+            life. Build your kingdom with me and I WILL make you suffer less and
+            move faster.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== Packages ===== -->
+  <section id="packages">
+    <div class="container">
+      <div class="section-label">Packages</div>
+      <h2 class="section-title fade-in">Choose your build.</h2>
+      <p class="section-subtitle fade-in">
+        What level of life do you want? Pay for that.
+      </p>
+      <div class="packages-grid">
+
+        <!-- ADHD Flow Foundations -->
+        <div class="package-card fade-in" id="pkg-foundations">
+          <div class="package-tag">Systems</div>
+          <div class="package-name">Flow Foundations</div>
+          <div class="package-price">$297 <span>/ month</span></div>
+          <ul class="package-features">
+            <li>Weekly Group Coaching Call</li>
+            <li>Personal Async System Audit</li>
+            <li>Body Doubling Productivity Chamber</li>
+            <li>KPI Flow Dashboard Template</li>
+            <li>Priority Async Message Access</li>
+            <li>Future ADHD-OS Price Lock</li>
+          </ul>
+          <a href="https://buy.stripe.com/8x28wOajral368m7stbjW0v" class="btn btn-ghost" style="width: 100%; justify-content: center;">Get Started</a>
+        </div>
+
+        <!-- Coaching -->
+        <div class="package-card featured fade-in" id="pkg-coaching">
+          <div class="package-tag">Most Popular</div>
+          <div class="package-name">Coaching</div>
+          <div class="package-price">$1,200 <span>/ month</span></div>
+          <ul class="package-features">
+            <li>Everything in Flow Foundations</li>
+            <li>All Flowforge Resources G-Drive</li>
+            <li>Weekly 60m 1:1 sessions</li>
+            <li>Custom KPI flow dashboard</li>
+            <li>AI call summaries + action items</li>
+            <li>Priority async access + SOS calls</li>
+            <li>AI pattern analysis + quarterly audit</li>
+          </ul>
+          <a href="https://buy.stripe.com/bJeaEWcrz1OxaoC8wxbjW0u" class="btn btn-primary" style="width: 100%; justify-content: center;">Book a Call</a>
+        </div>
+
+        <!-- Strategy Partner -->
+        <div class="package-card fade-in" id="pkg-strategy">
+          <div class="package-tag">Systems Build</div>
+          <div class="package-name">Strategy Partner</div>
+          <div class="package-price">$2,500 <span>/ month</span></div>
+          <ul class="package-features">
+            <li>Everything in Coaching</li>
+            <li>Biweekly 90m strategy sessions</li>
+            <li>Custom ADHD OS built for you</li>
+            <li>SOPs, decision frameworks, OKRs</li>
+            <li>Same-day async (8hr guarantee)</li>
+            <li>Unlimited walkthroughs + 3-4 automations/mo</li>
+          </ul>
+          <a href="https://buy.stripe.com/dRm4gy9fn0KtfIW9ABbjW0w" class="btn btn-ghost" style="width: 100%; justify-content: center;">Apply</a>
+        </div>
+
+      </div>
+
+      <!-- Chief of Staff CTA -->
+      <div class="whale-cta fade-in">
+        <p>Need a full operating system build? A chief of staff for your brain?</p>
+        <a href="#book">Let's talk.</a>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== Testimonial ===== -->
+  <section id="results">
+    <div class="container">
+      <div class="section-label">Results</div>
+      <h2 class="section-title fade-in">Proof of work.</h2>
+      <p class="section-subtitle fade-in">
+        Real transformation from real operators.
+      </p>
+      <div class="testimonial-card fade-in">
+        <iframe class="testimonial-video testimonial-portrait" 
+                src="https://www.youtube.com/embed/Zxzf6djFpnk" 
+                title="Ben Mikus Testimonial" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen></iframe>
+        <p class="testimonial-quote">Damian's helped make some of my dreams come true</p>
+        <div class="testimonial-author">
+          — Ben Mikus, AI Agency, King Lifestyle in Guatemala
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== Booking CTA ===== -->
+  <section id="book" class="cta-section">
+    <div class="container">
+      <div class="cta-box fade-in">
+        <h2>Ready to forge your flow?</h2>
+        <p>
+          15m discovery call for some tips + see if we're a good match.
+        </p>
+        <a href="https://calendar.app.google/rT363hdnCVa6CTW1A" class="btn btn-primary" id="booking-link">
+          Book Discovery Call →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">
+        <img src="assets/logo.png" alt=">flowforge">
+        <span>&gt;flowforge</span>
+      </div>
+      <div class="footer-right">
+        © 2026 &gt;flowforge. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== Scripts ===== -->
+  <script>
+    // ===== ASCII Fluid (Smooth Blobby Water) =====
+    (function() {
+      const canvas = document.getElementById('ascii-rain');
+      const ctx = canvas.getContext('2d');
+
+      // Fine-grained tiers for smooth density taper
+      const tiers = [
+        [' '],
+        ['.', '`'],
+        ['.', '·', ','],
+        ['·', ':', '~'],
+        [':', ';', '-'],
+        [';', '=', '~'],
+        ['=', '+', '≈'],
+        ['+', '*', '∽'],
+        ['*', '#', '░'],
+        ['#', '%', '▒'],
+        ['%', '@', '▓'],
+        ['@', '▓', '█']
+      ];
+      const fontSize = 14;
+      let cols, rows, time = 0;
+      // Random seed per page load — different pattern each visit
+      const seedX = Math.random() * 40;
+      const seedY = Math.random() * 40;
+
+      const charW = Math.round(fontSize * 0.65) - 0.5;
+      const charH = Math.round(fontSize * 1.1) + 1;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        cols = Math.floor(canvas.width / charW);
+        rows = Math.floor(canvas.height / charH);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      function noise(x, y) {
+        const ix = Math.floor(x), iy = Math.floor(y);
+        const fx = x - ix, fy = y - iy;
+        const sx = fx * fx * fx * (fx * (fx * 6 - 15) + 10);
+        const sy = fy * fy * fy * (fy * (fy * 6 - 15) + 10);
+
+        function hash(px, py) {
+          let h = (px * 374761393 + py * 668265263 + 1376312589) & 0x7fffffff;
+          h = ((h >> 13) ^ h) * 1274126177;
+          return ((h >> 16) ^ h) / 2147483647;
+        }
+
+        const a = hash(ix, iy);
+        const b = hash(ix + 1, iy);
+        const c = hash(ix, iy + 1);
+        const d = hash(ix + 1, iy + 1);
+        return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
+      }
+
+      function fbm(x, y) {
+        return noise(x * 0.3, y * 0.3) * 0.5
+             + noise(x * 0.7, y * 0.7) * 0.3
+             + noise(x * 1.8, y * 1.8) * 0.2;
+      }
+
+      function draw() {
+        ctx.fillStyle = '#07080c';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = `${fontSize}px JetBrains Mono, monospace`;
+        ctx.textBaseline = 'top';
+
+        const t = time * 0.005;
+
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const nx = col * 0.032 + seedX;
+            const ny = row * 0.055 + seedY;
+
+            // Three drifting fields for variation
+            const w1 = fbm(nx + t * 0.3, ny + t * 0.2);
+            const w2 = fbm(nx * 0.8 - t * 0.2, ny * 0.8 + t * 0.15);
+            const w3 = noise(nx * 0.12 + t * 0.35, ny * 0.15 - t * 0.25);
+
+            // Bias upward so peaks appear more often
+            let v = (w1 + w2 * 0.7 + w3 * 0.5) / 1.8;
+
+            if (v < 0.1) continue;
+
+            // Smooth taper — preserve peaks, gentle fade at edges
+            let nv = (v - 0.1) / 0.9;
+            nv = Math.pow(nv, 0.7); // Gentle power curve — peaks stay strong
+
+            // Pick tier based on density
+            const tierIdx = Math.min(Math.floor(nv * tiers.length), tiers.length - 1);
+            const tier = tiers[tierIdx];
+
+            // Cycle character within tier using noise + time (deterministic, no flicker)
+            const charCycle = noise(col * 0.5 + time * 0.02, row * 0.5);
+            const charInTier = Math.floor(charCycle * tier.length) % tier.length;
+            const char = tier[Math.abs(charInTier)];
+
+            if (char === ' ') continue;
+
+            // Vivid blue — brighter cyan shift for dense areas
+            const edgeY = Math.min(row / 5, (rows - row) / 5, 1);
+            const edgeX = Math.min(col / 4, (cols - col) / 4, 1);
+            const edge = edgeX * edgeY;
+            const opacity = nv * nv * 0.45 * edge;
+            const blue = 180 + Math.floor(nv * 75);
+            const green = Math.floor(40 + nv * 140);
+            ctx.fillStyle = `rgba(${Math.floor(30 + nv * 40)}, ${green}, ${blue}, ${opacity})`;
+            ctx.fillText(char, col * charW, row * charH);
+          }
+        }
+
+        time++;
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    })();
+
+    // ===== Intersection Observer for fade-in =====
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          const siblings = entry.target.parentElement.querySelectorAll('.fade-in');
+          const idx = Array.from(siblings).indexOf(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, idx * 120);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ===== Nav scroll =====
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.style.background = 'rgba(7, 8, 12, 0.95)';
+      } else {
+        nav.style.background = 'rgba(7, 8, 12, 0.8)';
+      }
+    });
+
+    // ===== Smooth scroll =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

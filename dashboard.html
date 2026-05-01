@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>&gt;flowforge ops</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒</text></svg>">
+</head>
+<body>
+
+  <canvas id="ascii-rain" aria-hidden="true"></canvas>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-radial" aria-hidden="true"></div>
+
+  <div class="dashboard">
+
+    <!-- ===== Header ===== -->
+    <header class="dash-header">
+      <a href="index.html" class="dash-brand">
+        <img src="assets/logo.png" alt=">flowforge">
+        <span>&gt;flowforge ops</span>
+      </a>
+      <div class="dash-date" id="dashDate"></div>
+      <div class="compound-score">
+        <span class="label">compound</span>
+        <span class="value" id="compoundValue">0</span>
+        <span class="trend flat" id="compoundTrend">→</span>
+      </div>
+    </header>
+
+    <!-- ===== Today Stack ===== -->
+    <div class="card" id="todayCard">
+      <div class="card-title">Today's Stack</div>
+      <div class="today-grid">
+        <div class="today-item">
+          <div class="today-label"><span>Content</span><span id="todayContentNum">0/4</span></div>
+          <div class="today-bar"><div class="today-fill" id="todayContentBar" style="width:0%"></div></div>
+        </div>
+        <div class="today-item">
+          <div class="today-label"><span>Deep Work</span><span id="todayDeepNum">0h/3h</span></div>
+          <div class="today-bar"><div class="today-fill" id="todayDeepBar" style="width:0%"></div></div>
+        </div>
+        <div class="today-item">
+          <div class="today-label"><span>Check-ins</span><span id="todayCheckNum">0/3</span></div>
+          <div class="today-bar"><div class="today-fill" id="todayCheckBar" style="width:0%"></div></div>
+        </div>
+        <div class="today-item">
+          <div class="today-label"><span>Outreach</span><span id="todayOutNum">0/7</span></div>
+          <div class="today-bar"><div class="today-fill" id="todayOutBar" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Flowmodoro ===== -->
+    <div class="card">
+      <div class="card-title">Flowmodoro <span class="shortcut">Space</span></div>
+      <div class="flowmodoro">
+        <div class="flow-top">
+          <button class="flow-btn" id="flowToggle">▶ Start</button>
+          <button class="flow-btn secondary" id="flowPause" style="display:none">⏸ Pause</button>
+          <div class="flow-timer" id="flowTimer">00:00:00</div>
+          <div class="flow-pie-wrap" id="flowPieWrap" data-state="idle">
+            <svg id="flowPie" viewBox="0 0 100 100" aria-hidden="true">
+              <title id="pieTitle">Work 0m · Break 0m</title>
+              <g transform="rotate(-90 50 50)">
+                <circle cx="50" cy="50" r="42" class="pie-track"/>
+                <circle cx="50" cy="50" r="42" class="pie-work" id="pieWork"/>
+                <circle cx="50" cy="50" r="42" class="pie-break" id="pieBreak"/>
+              </g>
+              <text x="50" y="58" class="pie-center-val" id="pieCenterVal">0h</text>
+            </svg>
+          </div>
+          <div class="flow-streak" id="flowStreak"></div>
+        </div>
+        <div class="flow-sessions" id="flowSessions">No sessions today</div>
+      </div>
+    </div>
+
+    <!-- ===== Metrics ===== -->
+    <div class="card">
+      <div class="card-title">Content <span class="shortcut">1</span></div>
+      <div class="metric-row">
+        <div class="metric-info">
+          <div class="metric-sub">Short-form posts across platforms</div>
+        </div>
+        <div class="metric-streak" id="contentStreak"></div>
+        <div class="metric-best" id="contentBest"></div>
+      </div>
+      <div class="sparkline" id="contentSparkline"></div>
+      <div class="action-row">
+        <button class="action-btn" onclick="logMetric('content','tiktok')">+ TikTok</button>
+        <button class="action-btn" onclick="logMetric('content','youtube')">+ YouTube</button>
+        <button class="action-btn" onclick="logMetric('content','instagram')">+ Instagram</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Deep Work <span class="shortcut">2</span></div>
+      <div class="metric-row">
+        <div class="metric-info">
+          <div class="metric-sub">Hours in focused work (via flowmodoro)</div>
+        </div>
+        <div class="metric-streak" id="deepworkStreak"></div>
+        <div class="metric-best" id="deepworkBest"></div>
+      </div>
+      <div class="sparkline" id="deepworkSparkline"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Check-ins <span class="shortcut">3</span></div>
+      <div class="metric-row">
+        <div class="metric-info">
+          <div class="metric-sub">Client touchpoints</div>
+        </div>
+        <div class="metric-streak" id="checkinsStreak"></div>
+        <div class="metric-best" id="checkinsBest"></div>
+      </div>
+      <div class="sparkline" id="checkinsSparkline"></div>
+      <div class="action-row">
+        <button class="action-btn" onclick="logMetric('checkins')">+ Check-in</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Outreach <span class="shortcut">4</span></div>
+      <div class="metric-row">
+        <div class="metric-info">
+          <div class="metric-sub">Cold/warm outreach touches</div>
+        </div>
+        <div class="metric-streak" id="outreachStreak"></div>
+        <div class="metric-best" id="outreachBest"></div>
+      </div>
+      <div class="sparkline" id="outreachSparkline"></div>
+      <div class="action-row">
+        <button class="action-btn" onclick="logMetric('outreach')">+ Outreach</button>
+      </div>
+    </div>
+
+    <!-- ===== Heatmap ===== -->
+    <div class="card">
+      <div class="card-title">Activity — Last 12 Weeks</div>
+      <div class="heatmap-container">
+        <div class="heatmap-wrapper">
+          <div class="heatmap-labels">
+            <div class="heatmap-label">Mon</div>
+            <div class="heatmap-label">Tue</div>
+            <div class="heatmap-label">Wed</div>
+            <div class="heatmap-label">Thu</div>
+            <div class="heatmap-label">Fri</div>
+            <div class="heatmap-label">Sat</div>
+            <div class="heatmap-label">Sun</div>
+          </div>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Data Controls ===== -->
+    <div class="data-controls">
+      <button class="data-btn" onclick="exportData()">↓ Export JSON</button>
+      <button class="data-btn" onclick="document.getElementById('importFile').click()">↑ Import JSON</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      <button class="data-btn" onclick="copyMarkdown()">📋 Copy Today</button>
+      <button class="data-btn danger" onclick="clearAllData()">⚠ Reset</button>
+    </div>
+
+    <div class="key-hints">
+      <kbd>1</kbd>-<kbd>4</kbd> quick log &nbsp;
+      <kbd>Space</kbd> flowmodoro &nbsp;
+      <kbd>E</kbd> export
+    </div>
+
+  </div>
+
+  <script>
+  // =====================================================
+  // DATA LAYER
+  // =====================================================
+  const TARGETS = { content: 4, deepwork: 180, checkins: 3, outreach: 7 }; // deepwork in minutes
+
+  function today() {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  function getStore(key) {
+    try { return JSON.parse(localStorage.getItem('kpi_' + key)) || []; }
+    catch { return []; }
+  }
+
+  function setStore(key, data) {
+    localStorage.setItem('kpi_' + key, JSON.stringify(data));
+  }
+
+  function getTodayEntry(key) {
+    const data = getStore(key);
+    return data.find(d => d.date === today()) || null;
+  }
+
+  function ensureToday(key, defaults) {
+    let data = getStore(key);
+    if (!data.find(d => d.date === today())) {
+      data.push({ date: today(), ...defaults });
+      setStore(key, data);
+    }
+    return data;
+  }
+
+  // =====================================================
+  // METRIC LOGGING
+  // =====================================================
+  function logMetric(metric, sub) {
+    if (metric === 'content') {
+      ensureToday('content', { tiktok: 0, youtube: 0, instagram: 0, total: 0 });
+      let data = getStore('content');
+      let entry = data.find(d => d.date === today());
+      if (sub) entry[sub] = (entry[sub] || 0) + 1;
+      entry.total = (entry.tiktok || 0) + (entry.youtube || 0) + (entry.instagram || 0);
+      setStore('content', data);
+    } else if (metric === 'checkins') {
+      ensureToday('checkins', { count: 0 });
+      let data = getStore('checkins');
+      let entry = data.find(d => d.date === today());
+      entry.count++;
+      setStore('checkins', data);
+    } else if (metric === 'outreach') {
+      ensureToday('outreach', { count: 0 });
+      let data = getStore('outreach');
+      let entry = data.find(d => d.date === today());
+      entry.count++;
+      setStore('outreach', data);
+    }
+
+    // Pulse animation
+    event.target.classList.remove('pulsed');
+    void event.target.offsetWidth;
+    event.target.classList.add('pulsed');
+
+    refreshAll();
+  }
+
+  // =====================================================
+  // FLOWMODORO
+  // =====================================================
+  const FLOW_KEY = 'kpi_flow_state';
+  const FLOW_STALE_MS = 8 * 60 * 60 * 1000; // 8 hours
+  const BREAK_RATIO = 1 / 3; // break = 1/3 of work
+
+  let flowState = 'stopped'; // stopped | working | break | paused
+  let flowPausedFrom = null; // 'working' | 'break' (only when paused)
+  let flowStart = null;
+  let flowElapsed = 0; // accumulated work ms (before current run start)
+  let flowBreakEnd = null;
+  let flowBreakRemaining = null; // ms left on break when paused
+  let flowBreakPlanned = 0; // ms of the current break allocation
+  let flowInterval = null;
+
+  function saveFlowState() {
+    localStorage.setItem(FLOW_KEY, JSON.stringify({
+      flowState, flowPausedFrom, flowStart, flowElapsed,
+      flowBreakEnd, flowBreakRemaining, flowBreakPlanned,
+      savedAt: Date.now()
+    }));
+  }
+
+  function clearFlowPersistence() {
+    localStorage.removeItem(FLOW_KEY);
+  }
+
+  function loadFlowState() {
+    let raw;
+    try { raw = JSON.parse(localStorage.getItem(FLOW_KEY)); }
+    catch { return; }
+    if (!raw || raw.flowState === 'stopped') return;
+
+    // Stale-session guard: running session started >8h ago → discard
+    if (raw.flowState === 'working' && raw.flowStart && (Date.now() - raw.flowStart) > FLOW_STALE_MS) {
+      clearFlowPersistence();
+      return;
+    }
+    // Break already expired while tab was closed
+    if (raw.flowState === 'break' && raw.flowBreakEnd && Date.now() >= raw.flowBreakEnd) {
+      clearFlowPersistence();
+      return;
+    }
+
+    flowState = raw.flowState;
+    flowPausedFrom = raw.flowPausedFrom || null;
+    flowStart = raw.flowStart;
+    flowElapsed = raw.flowElapsed || 0;
+    flowBreakEnd = raw.flowBreakEnd;
+    flowBreakRemaining = raw.flowBreakRemaining;
+    flowBreakPlanned = raw.flowBreakPlanned || 0;
+
+    if (flowState === 'working' || flowState === 'break') {
+      flowInterval = setInterval(flowTick, 1000);
+    }
+    renderFlowUI();
+  }
+
+  function renderFlowUI() {
+    const toggleBtn = document.getElementById('flowToggle');
+    const pauseBtn = document.getElementById('flowPause');
+    const timerEl = document.getElementById('flowTimer');
+    const pieWrap = document.getElementById('flowPieWrap');
+
+    toggleBtn.classList.remove('active', 'stop');
+    timerEl.classList.remove('running', 'break');
+
+    if (flowState === 'stopped') {
+      toggleBtn.textContent = '▶ Start';
+      pauseBtn.style.display = 'none';
+      pieWrap.dataset.state = 'idle';
+      timerEl.textContent = '00:00:00';
+    } else if (flowState === 'working') {
+      toggleBtn.textContent = '⏹ Stop';
+      toggleBtn.classList.add('active');
+      pauseBtn.style.display = '';
+      pauseBtn.textContent = '⏸ Pause';
+      pieWrap.dataset.state = 'work';
+      timerEl.classList.add('running');
+    } else if (flowState === 'break') {
+      toggleBtn.textContent = '⏹ Stop';
+      toggleBtn.classList.add('stop');
+      pauseBtn.style.display = '';
+      pauseBtn.textContent = '⏸ Pause';
+      pieWrap.dataset.state = 'break';
+      timerEl.classList.add('break');
+    } else if (flowState === 'paused') {
+      toggleBtn.textContent = '⏹ Stop';
+      toggleBtn.classList.add('stop');
+      pauseBtn.style.display = '';
+      pauseBtn.textContent = '▶ Resume';
+      pieWrap.dataset.state = 'paused';
+      // Keep the timer frozen at its last drawn value — don't alter text here.
+    }
+  }
+
+  function flowToggle() {
+    if (flowState === 'stopped') {
+      // Idle → Work
+      flowState = 'working';
+      flowStart = Date.now();
+      flowElapsed = 0;
+      flowInterval = setInterval(flowTick, 1000);
+      renderFlowUI();
+      saveFlowState();
+    } else if (flowState === 'working') {
+      // Stop work → auto-start 1/3 break
+      const totalMs = flowElapsed + (Date.now() - flowStart);
+      workToBreak(totalMs);
+    } else if (flowState === 'break' || flowState === 'paused') {
+      // End everything → Idle
+      flowEnd();
+    }
+  }
+
+  function flowPause() {
+    if (flowState === 'working') {
+      clearInterval(flowInterval);
+      flowElapsed += Date.now() - flowStart;
+      flowStart = null;
+      flowPausedFrom = 'working';
+      flowState = 'paused';
+      renderFlowUI();
+      saveFlowState();
+    } else if (flowState === 'break') {
+      clearInterval(flowInterval);
+      flowBreakRemaining = Math.max(flowBreakEnd - Date.now(), 0);
+      flowBreakEnd = null;
+      flowPausedFrom = 'break';
+      flowState = 'paused';
+      renderFlowUI();
+      saveFlowState();
+    } else if (flowState === 'paused') {
+      // Resume
+      if (flowPausedFrom === 'working') {
+        flowStart = Date.now();
+        flowState = 'working';
+      } else if (flowPausedFrom === 'break') {
+        flowBreakEnd = Date.now() + (flowBreakRemaining || 0);
+        flowBreakRemaining = null;
+        flowState = 'break';
+      }
+      flowPausedFrom = null;
+      flowInterval = setInterval(flowTick, 1000);
+      renderFlowUI();
+      saveFlowState();
+    }
+  }
+
+  function workToBreak(workMs) {
+    clearInterval(flowInterval);
+    const mins = Math.round(workMs / 60000);
+    if (mins > 0) logFlowSession(mins);
+    const breakMs = Math.max(Math.round(workMs * BREAK_RATIO), 60000); // min 1 min break
+    flowState = 'break';
+    flowBreakEnd = Date.now() + breakMs;
+    flowBreakPlanned = breakMs;
+    flowStart = null;
+    flowElapsed = 0;
+    flowInterval = setInterval(flowTick, 1000);
+    renderFlowUI();
+    saveFlowState();
+    refreshAll();
+  }
+
+  function currentBreakConsumedMs() {
+    if (flowState === 'break') {
+      return Math.max(flowBreakPlanned - (flowBreakEnd - Date.now()), 0);
+    }
+    if (flowState === 'paused' && flowPausedFrom === 'break') {
+      return Math.max(flowBreakPlanned - (flowBreakRemaining || 0), 0);
+    }
+    return 0;
+  }
+
+  function flowEnd() {
+    clearInterval(flowInterval);
+    // Log accumulated work (if paused from work)
+    if (flowState === 'paused' && flowPausedFrom === 'working') {
+      const mins = Math.round(flowElapsed / 60000);
+      if (mins > 0) logFlowSession(mins);
+    }
+    // Log consumed break (if currently in break or paused-from-break)
+    const breakMs = currentBreakConsumedMs();
+    const breakMins = Math.round(breakMs / 60000);
+    if (breakMins > 0) logFlowBreak(breakMins);
+
+    flowState = 'stopped';
+    flowPausedFrom = null;
+    flowStart = null;
+    flowElapsed = 0;
+    flowBreakEnd = null;
+    flowBreakRemaining = null;
+    flowBreakPlanned = 0;
+    clearFlowPersistence();
+    renderFlowUI();
+    refreshAll();
+  }
+
+  function flowTick() {
+    if (flowState === 'working') {
+      const ms = flowElapsed + (Date.now() - flowStart);
+      document.getElementById('flowTimer').textContent = formatMs(ms);
+    } else if (flowState === 'break') {
+      const remaining = flowBreakEnd - Date.now();
+      if (remaining <= 0) {
+        flowEnd();
+        return;
+      }
+      document.getElementById('flowTimer').textContent = '-' + formatMs(remaining);
+    }
+  }
+
+  function logFlowSession(mins) {
+    ensureToday('deepwork', { minutes: 0, sessions: [] });
+    let data = getStore('deepwork');
+    let entry = data.find(d => d.date === today());
+    entry.minutes += mins;
+    entry.sessions.push(mins);
+    setStore('deepwork', data);
+  }
+
+  function logFlowBreak(mins) {
+    ensureToday('breaks', { minutes: 0 });
+    let data = getStore('breaks');
+    let entry = data.find(d => d.date === today());
+    entry.minutes += mins;
+    setStore('breaks', data);
+  }
+
+  function formatMs(ms) {
+    const abs = Math.abs(ms);
+    const h = Math.floor(abs / 3600000);
+    const m = Math.floor((abs % 3600000) / 60000);
+    const s = Math.floor((abs % 60000) / 1000);
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+
+  document.getElementById('flowToggle').addEventListener('click', flowToggle);
+  document.getElementById('flowPause').addEventListener('click', flowPause);
+
+  // =====================================================
+  // FLOW PIE (work vs break today)
+  // =====================================================
+  function renderFlowPie() {
+    const de = getTodayEntry('deepwork');
+    const be = getTodayEntry('breaks');
+    const workMin = de ? (de.minutes || 0) : 0;
+    const breakMin = be ? (be.minutes || 0) : 0;
+    const total = workMin + breakMin;
+
+    const circ = 2 * Math.PI * 42;
+    const workEl = document.getElementById('pieWork');
+    const breakEl = document.getElementById('pieBreak');
+
+    if (total === 0) {
+      workEl.setAttribute('stroke-dasharray', `0 ${circ}`);
+      breakEl.setAttribute('stroke-dasharray', `0 ${circ}`);
+    } else {
+      const workFrac = workMin / total;
+      const breakFrac = breakMin / total;
+      const workLen = circ * workFrac;
+      const breakLen = circ * breakFrac;
+      workEl.setAttribute('stroke-dasharray', `${workLen} ${circ - workLen}`);
+      workEl.setAttribute('stroke-dashoffset', '0');
+      breakEl.setAttribute('stroke-dasharray', `${breakLen} ${circ - breakLen}`);
+      breakEl.setAttribute('stroke-dashoffset', `${-workLen}`);
+    }
+
+    const totalH = total / 60;
+    document.getElementById('pieCenterVal').textContent =
+      totalH >= 1 ? totalH.toFixed(1) + 'h' : total + 'm';
+    document.getElementById('pieTitle').textContent =
+      `Work ${formatMin(workMin)} · Break ${formatMin(breakMin)}`;
+  }
+
+  function formatMin(m) {
+    if (m >= 60) return (m / 60).toFixed(1) + 'h';
+    return m + 'm';
+  }
+
+  // =====================================================
+  // SPARKLINES
+  // =====================================================
+  function getMetricValues(key, days, valueFn) {
+    const data = getStore(key);
+    const values = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const ds = d.toISOString().split('T')[0];
+      const entry = data.find(e => e.date === ds);
+      values.push(entry ? valueFn(entry) : 0);
+    }
+    return values;
+  }
+
+  function renderSparkline(containerId, values) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const w = container.clientWidth || 300;
+    const h = 36;
+    const max = Math.max(...values, 1);
+    const pts = values.map((v, i) => ({
+      x: (i / (values.length - 1)) * w,
+      y: h - 4 - (v / max) * (h - 8)
+    }));
+
+    const lineD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+    const areaD = lineD + ` L${pts[pts.length-1].x},${h} L${pts[0].x},${h} Z`;
+
+    container.innerHTML = `
+      <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="sg_${containerId}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(77,168,255,0.3)"/>
+            <stop offset="100%" stop-color="rgba(77,168,255,0)"/>
+          </linearGradient>
+        </defs>
+        <path d="${areaD}" fill="url(#sg_${containerId})" />
+        <path d="${lineD}" class="sparkline-line" />
+        ${pts.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" class="sparkline-dot${i === pts.length - 1 ? ' today' : ''}" r="${i === pts.length - 1 ? 3.5 : 2}"/>`).join('')}
+      </svg>
+    `;
+  }
+
+  // =====================================================
+  // STREAKS
+  // =====================================================
+  function calcStreak(key, valueFn) {
+    const data = getStore(key);
+    let streak = 0;
+    const d = new Date();
+    while (true) {
+      const ds = d.toISOString().split('T')[0];
+      const entry = data.find(e => e.date === ds);
+      if (entry && valueFn(entry) > 0) {
+        streak++;
+        d.setDate(d.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  function calcBest(key, valueFn) {
+    const data = getStore(key);
+    let best = 0;
+    data.forEach(e => { const v = valueFn(e); if (v > best) best = v; });
+    return best;
+  }
+
+  function renderStreak(elementId, streak) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    if (streak === 0) { el.textContent = ''; return; }
+    const flames = streak >= 7 ? '🔥🔥🔥' : streak >= 3 ? '🔥🔥' : '🔥';
+    el.textContent = `${flames} ${streak}d`;
+  }
+
+  function renderBest(elementId, best, unit) {
+    const el = document.getElementById(elementId);
+    if (!el || best === 0) { if (el) el.textContent = ''; return; }
+    el.textContent = `best: ${best}${unit}`;
+  }
+
+  // =====================================================
+  // HEATMAP
+  // =====================================================
+  function renderHeatmap() {
+    const container = document.getElementById('heatmap');
+    container.innerHTML = '';
+    const weeks = 12;
+    const endDate = new Date();
+    const dayOfWeek = (endDate.getDay() + 6) % 7; // Mon=0
+    const startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - (weeks * 7 - 1) - dayOfWeek);
+
+    // Gather all data
+    const allData = {};
+    ['content', 'deepwork', 'checkins', 'outreach'].forEach(key => {
+      getStore(key).forEach(entry => {
+        const d = entry.date;
+        if (!allData[d]) allData[d] = 0;
+        if (key === 'content') allData[d] += entry.total || 0;
+        else if (key === 'deepwork') allData[d] += Math.round((entry.minutes || 0) / 30); // 30min = 1 point
+        else allData[d] += entry.count || 0;
+      });
+    });
+
+    const maxVal = Math.max(...Object.values(allData), 1);
+
+    const cursor = new Date(startDate);
+    let weekCol = null;
+    while (cursor <= endDate) {
+      const dow = (cursor.getDay() + 6) % 7;
+      if (dow === 0) {
+        weekCol = document.createElement('div');
+        weekCol.className = 'heatmap-col';
+        container.appendChild(weekCol);
+      }
+      if (!weekCol) {
+        weekCol = document.createElement('div');
+        weekCol.className = 'heatmap-col';
+        container.appendChild(weekCol);
+      }
+
+      const ds = cursor.toISOString().split('T')[0];
+      const val = allData[ds] || 0;
+      const level = val === 0 ? 0 : Math.min(Math.ceil((val / maxVal) * 4), 4);
+
+      const cell = document.createElement('div');
+      cell.className = 'heatmap-cell';
+      cell.setAttribute('data-level', level);
+      cell.innerHTML = `<div class="tooltip">${ds}: ${val} pts</div>`;
+      weekCol.appendChild(cell);
+
+      cursor.setDate(cursor.getDate() + 1);
+    }
+  }
+
+  // =====================================================
+  // COMPOUND SCORE
+  // =====================================================
+  function calcCompound() {
+    const te = getTodayEntry('content');
+    const de = getTodayEntry('deepwork');
+    const ce = getTodayEntry('checkins');
+    const oe = getTodayEntry('outreach');
+
+    const content = te ? Math.min((te.total || 0) / TARGETS.content, 1) : 0;
+    const deep = de ? Math.min((de.minutes || 0) / TARGETS.deepwork, 1) : 0;
+    const check = ce ? Math.min((ce.count || 0) / TARGETS.checkins, 1) : 0;
+    const out = oe ? Math.min((oe.count || 0) / TARGETS.outreach, 1) : 0;
+
+    return Math.round((content * 25 + deep * 35 + check * 20 + out * 20));
+  }
+
+  function calcCompoundYesterday() {
+    const y = new Date();
+    y.setDate(y.getDate() - 1);
+    const ys = y.toISOString().split('T')[0];
+
+    function getYesterday(key) {
+      return getStore(key).find(e => e.date === ys) || null;
+    }
+
+    const te = getYesterday('content');
+    const de = getYesterday('deepwork');
+    const ce = getYesterday('checkins');
+    const oe = getYesterday('outreach');
+
+    const content = te ? Math.min((te.total || 0) / TARGETS.content, 1) : 0;
+    const deep = de ? Math.min((de.minutes || 0) / TARGETS.deepwork, 1) : 0;
+    const check = ce ? Math.min((ce.count || 0) / TARGETS.checkins, 1) : 0;
+    const out = oe ? Math.min((oe.count || 0) / TARGETS.outreach, 1) : 0;
+
+    return Math.round((content * 25 + deep * 35 + check * 20 + out * 20));
+  }
+
+  // =====================================================
+  // TODAY STACK
+  // =====================================================
+  function refreshTodayStack() {
+    const ce = getTodayEntry('content');
+    const de = getTodayEntry('deepwork');
+    const che = getTodayEntry('checkins');
+    const oe = getTodayEntry('outreach');
+
+    const cv = ce ? (ce.total || 0) : 0;
+    const dv = de ? (de.minutes || 0) : 0;
+    const chv = che ? (che.count || 0) : 0;
+    const ov = oe ? (oe.count || 0) : 0;
+
+    setBar('todayContentBar', 'todayContentNum', cv, TARGETS.content, `${cv}/${TARGETS.content}`);
+    setBar('todayDeepBar', 'todayDeepNum', dv, TARGETS.deepwork, `${(dv/60).toFixed(1)}h/${TARGETS.deepwork/60}h`);
+    setBar('todayCheckBar', 'todayCheckNum', chv, TARGETS.checkins, `${chv}/${TARGETS.checkins}`);
+    setBar('todayOutBar', 'todayOutNum', ov, TARGETS.outreach, `${ov}/${TARGETS.outreach}`);
+  }
+
+  function setBar(barId, numId, val, target, label) {
+    const pct = Math.min((val / target) * 100, 100);
+    const bar = document.getElementById(barId);
+    const num = document.getElementById(numId);
+    bar.style.width = pct + '%';
+    bar.className = 'today-fill' + (val >= target ? ' complete' : '') + (val > target * 1.5 ? ' over' : '');
+    num.textContent = label;
+  }
+
+  // =====================================================
+  // FLOW SESSIONS DISPLAY
+  // =====================================================
+  function refreshFlowSessions() {
+    const entry = getTodayEntry('deepwork');
+    const el = document.getElementById('flowSessions');
+    if (!entry || !entry.sessions || entry.sessions.length === 0) {
+      el.textContent = 'No sessions today';
+      return;
+    }
+    el.innerHTML = entry.sessions.map(m =>
+      `<span class="flow-session-tag">${m}m</span>`
+    ).join('');
+  }
+
+  // =====================================================
+  // DATA CONTROLS
+  // =====================================================
+  function exportData() {
+    const data = {};
+    ['content', 'deepwork', 'breaks', 'checkins', 'outreach'].forEach(k => {
+      data[k] = getStore(k);
+    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `flowforge-kpi-${today()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        ['content', 'deepwork', 'breaks', 'checkins', 'outreach'].forEach(k => {
+          if (data[k]) setStore(k, data[k]);
+        });
+        refreshAll();
+      } catch (err) {
+        alert('Invalid JSON file');
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  }
+
+  function copyMarkdown() {
+    const ce = getTodayEntry('content');
+    const de = getTodayEntry('deepwork');
+    const che = getTodayEntry('checkins');
+    const oe = getTodayEntry('outreach');
+
+    const md = `## ${today()} — Compound: ${calcCompound()}/100
+- **Content:** ${ce ? ce.total : 0}/${TARGETS.content} (TT:${ce?.tiktok||0} YT:${ce?.youtube||0} IG:${ce?.instagram||0})
+- **Deep Work:** ${de ? (de.minutes/60).toFixed(1) : 0}h/${TARGETS.deepwork/60}h ${de?.sessions ? '[' + de.sessions.map(s=>s+'m').join(', ') + ']' : ''}
+- **Check-ins:** ${che ? che.count : 0}/${TARGETS.checkins}
+- **Outreach:** ${oe ? oe.count : 0}/${TARGETS.outreach}`;
+
+    navigator.clipboard.writeText(md).then(() => {
+      const btn = event.target;
+      btn.textContent = '✓ Copied';
+      setTimeout(() => btn.textContent = '📋 Copy Today', 1500);
+    });
+  }
+
+  function clearAllData() {
+    if (!confirm('This will delete ALL KPI data. Are you sure?')) return;
+    ['content', 'deepwork', 'breaks', 'checkins', 'outreach'].forEach(k => {
+      localStorage.removeItem('kpi_' + k);
+    });
+    refreshAll();
+  }
+
+  // =====================================================
+  // KEYBOARD SHORTCUTS
+  // =====================================================
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    switch(e.key) {
+      case '1': logMetric('content', 'tiktok'); break;
+      case '2': /* deepwork is flowmodoro-only */ break;
+      case '3': logMetric('checkins'); break;
+      case '4': logMetric('outreach'); break;
+      case ' ':
+        e.preventDefault();
+        flowToggle();
+        break;
+      case 'e': case 'E': exportData(); break;
+    }
+  });
+
+  // =====================================================
+  // REFRESH ALL
+  // =====================================================
+  function refreshAll() {
+    // Date
+    document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric'
+    });
+
+    // Compound
+    const comp = calcCompound();
+    const compYest = calcCompoundYesterday();
+    document.getElementById('compoundValue').textContent = comp;
+    const trendEl = document.getElementById('compoundTrend');
+    if (comp > compYest) { trendEl.textContent = '↑'; trendEl.className = 'trend up'; }
+    else if (comp < compYest) { trendEl.textContent = '↓'; trendEl.className = 'trend down'; }
+    else { trendEl.textContent = '→'; trendEl.className = 'trend flat'; }
+
+    // Today stack
+    refreshTodayStack();
+
+    // Flow sessions + pie
+    refreshFlowSessions();
+    renderFlowPie();
+
+    // Flow streak
+    const dwStreak = calcStreak('deepwork', e => e.minutes || 0);
+    const el = document.getElementById('flowStreak');
+    if (dwStreak > 0) {
+      el.textContent = `🔥 ${dwStreak}d streak`;
+    } else {
+      el.textContent = '';
+    }
+
+    // Sparklines (14 days)
+    renderSparkline('contentSparkline', getMetricValues('content', 14, e => e.total || 0));
+    renderSparkline('deepworkSparkline', getMetricValues('deepwork', 14, e => (e.minutes || 0) / 60));
+    renderSparkline('checkinsSparkline', getMetricValues('checkins', 14, e => e.count || 0));
+    renderSparkline('outreachSparkline', getMetricValues('outreach', 14, e => e.count || 0));
+
+    // Streaks
+    renderStreak('contentStreak', calcStreak('content', e => e.total || 0));
+    renderStreak('deepworkStreak', dwStreak);
+    renderStreak('checkinsStreak', calcStreak('checkins', e => e.count || 0));
+    renderStreak('outreachStreak', calcStreak('outreach', e => e.count || 0));
+
+    // Bests
+    renderBest('contentBest', calcBest('content', e => e.total || 0), '');
+    renderBest('deepworkBest', calcBest('deepwork', e => Math.round((e.minutes || 0) / 60 * 10) / 10), 'h');
+    renderBest('checkinsBest', calcBest('checkins', e => e.count || 0), '');
+    renderBest('outreachBest', calcBest('outreach', e => e.count || 0), '');
+
+    // Heatmap
+    renderHeatmap();
+  }
+
+  // =====================================================
+  // ASCII FLUID (same as landing page)
+  // =====================================================
+  (function() {
+    const canvas = document.getElementById('ascii-rain');
+    const ctx = canvas.getContext('2d');
+    const tiers = [
+      [' '],['.','`'],['.','·',','],[' ·',':','~'],[':', ';','-'],[';','=','~'],
+      ['=','+','≈'],['+','*','∽'],['*','#','░'],['#','%','▒'],['%','@','▓'],['@','▓','█']
+    ];
+    const fontSize = 14;
+    let cols, rows, time = 0;
+    const seedX = Math.random() * 40, seedY = Math.random() * 40;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      cols = Math.floor(canvas.width / (fontSize * 0.62));
+      rows = Math.floor(canvas.height / (fontSize * 1.1));
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function noise(x, y) {
+      const ix = Math.floor(x), iy = Math.floor(y);
+      const fx = x - ix, fy = y - iy;
+      const sx = fx*fx*fx*(fx*(fx*6-15)+10), sy = fy*fy*fy*(fy*(fy*6-15)+10);
+      function hash(px,py){let h=(px*374761393+py*668265263+1376312589)&0x7fffffff;h=((h>>13)^h)*1274126177;return((h>>16)^h)/2147483647;}
+      const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);
+      return a+(b-a)*sx+(c-a)*sy+(a-b-c+d)*sx*sy;
+    }
+    function fbm(x,y){return noise(x*0.3,y*0.3)*0.5+noise(x*0.7,y*0.7)*0.3+noise(x*1.8,y*1.8)*0.2;}
+
+    function draw() {
+      ctx.fillStyle='#07080c';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.font=`${fontSize}px JetBrains Mono, monospace`;
+      ctx.textBaseline='top';
+      const charW=fontSize*0.62,charH=fontSize*1.1,t=time*0.005;
+      for(let row=0;row<rows;row++){
+        for(let col=0;col<cols;col++){
+          const nx=col*0.04+seedX,ny=row*0.055+seedY;
+          const w1=fbm(nx+t*0.3,ny+t*0.2),w2=fbm(nx*0.8-t*0.2,ny*0.8+t*0.15),w3=noise(nx*0.12+t*0.35,ny*0.15-t*0.25);
+          let v=(w1+w2*0.7+w3*0.5)/1.8;
+          if(v<0.1)continue;
+          let nv=(v-0.1)/0.9;nv=Math.pow(nv,0.7);
+          const tierIdx=Math.min(Math.floor(nv*tiers.length),tiers.length-1);
+          const tier=tiers[tierIdx];
+          const cc=noise(col*0.5+time*0.02,row*0.5);
+          const ci=Math.floor(cc*tier.length)%tier.length;
+          const char=tier[Math.abs(ci)];
+          if(char===' ')continue;
+          const edgeY=Math.min(row/5,(rows-row)/5,1),edgeX=Math.min(col/4,(cols-col)/4,1);
+          const opacity=nv*nv*0.45*edgeX*edgeY;
+          const blue=180+Math.floor(nv*75),green=Math.floor(40+nv*140);
+          ctx.fillStyle=`rgba(${Math.floor(30+nv*40)},${green},${blue},${opacity})`;
+          ctx.fillText(char,col*charW,row*charH);
+        }
+      }
+      time++;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  // =====================================================
+  // INIT
+  // =====================================================
+  loadFlowState();
+  renderFlowUI();
+  refreshAll();
+  </script>
+
+</body>
+</html>
