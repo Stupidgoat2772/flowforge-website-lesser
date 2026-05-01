@@ -85,8 +85,8 @@ img {
   pointer-events: none;
   z-index: 0;
   background-image:
-    linear-gradient(rgba(77, 168, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(77, 168, 255, 0.015) 1px, transparent 1px);
+    linear-gradient(rgba(77, 168, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77, 168, 255, 0.08) 1px, transparent 1px);
   background-size: 80px 80px;
 }
 
@@ -97,7 +97,7 @@ img {
   width: 120vw; height: 120vh;
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(ellipse at center, rgba(77, 168, 255, 0.06) 0%, transparent 60%);
+  background: radial-gradient(ellipse at center, rgba(77, 168, 255, 0.15) 0%, transparent 60%);
 }
 
 #ascii-rain {
