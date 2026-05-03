@@ -670,6 +670,8 @@ section {
   line-height: 0;
   vertical-align: -0.4em;
   margin-right: 0.4rem;
+  display: inline-block;
+  padding-left: 0.1em;
 }
 
 .testimonial-quote::after {
@@ -679,7 +681,9 @@ section {
   opacity: 0.3;
   line-height: 0;
   vertical-align: -0.4em;
-  margin-left: -0.1rem;
+  margin-left: 0.1rem;
+  display: inline-block;
+  padding-right: 0.1em;
 }
 
 
