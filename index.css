@@ -660,6 +660,7 @@ section {
   color: var(--text-secondary);
   line-height: 1.8;
   margin-bottom: 1.5rem;
+  padding: 0 0.3em;
 }
 
 .testimonial-quote::before {
@@ -670,7 +671,6 @@ section {
   line-height: 0;
   vertical-align: -0.4em;
   margin-right: 0.2rem;
-  padding-left: 0.1em;
 }
 
 .testimonial-quote::after {
@@ -681,7 +681,6 @@ section {
   line-height: 0;
   vertical-align: -0.4em;
   margin-left: 0.1rem;
-  padding-right: 0.1em;
 }
 
 
