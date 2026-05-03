@@ -665,6 +665,7 @@ section {
 
 .testimonial-quote::before {
   content: '\0022';
+  font-style: normal;
   font-size: 3rem;
   color: var(--blue-500);
   opacity: 0.3;
@@ -675,6 +676,7 @@ section {
 
 .testimonial-quote::after {
   content: '\0022';
+  font-style: normal;
   font-size: 3rem;
   color: var(--blue-500);
   opacity: 0.3;
