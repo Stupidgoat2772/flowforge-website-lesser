@@ -13,6 +13,7 @@
   <!-- Background Effects -->
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
+  <div id="ascii-rain" aria-hidden="true"></div>
 
   <!-- ===== Navigation ===== -->
   <nav class="nav" id="nav">
@@ -213,6 +214,7 @@
   </footer>
 
   <!-- ===== Scripts ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
   <script>
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, index) => {
@@ -231,6 +233,34 @@
     });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ===== ASCII background =====
+    function initAscii() {
+      const container = document.getElementById('ascii-rain');
+      if (typeof SimplexNoise === 'undefined') return;
+      const simplex = new SimplexNoise();
+      const chars = [' ', ' ', ' ', '.', '-', ':', '=', '+', '*', '#', '%', '@'];
+      let time = 0;
+      setInterval(() => {
+        const cols = Math.floor(window.innerWidth / 6.5);
+        const rows = Math.floor(window.innerHeight / 11);
+        let content = '';
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            let n = simplex.noise3D(x * 0.012, y * 0.024, time);
+            n = (n + 1) / 2;
+            let charIdx = Math.floor(n * chars.length);
+            if (charIdx >= chars.length) charIdx = chars.length - 1;
+            if (charIdx < 0) charIdx = 0;
+            content += chars[charIdx];
+          }
+          content += '\n';
+        }
+        container.innerText = content;
+        time += 0.003;
+      }, 50);
+    }
+    initAscii();
 
     // ===== Nav scroll =====
     const nav = document.getElementById('nav');
